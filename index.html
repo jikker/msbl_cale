@@ -39,19 +39,19 @@
       </tr>
       <tr>
         <td>葉子</td>
-        <td><input type="text" id="yz" class="form-control change"></td>
+        <td><input type="number" id="yz" class="form-control change select"></td>
       </tr>
       <tr>
         <td>菁仔</td>
-        <td><input type="text" id="bl" class="form-control change"></td>
+        <td><input type="number" id="bl" class="form-control change select"></td>
       </tr>
       <tr>
         <td>粒數</td>
-        <td><input type="text" id="number" class="form-control"></td>
+        <td><input type="number" id="number" class="form-control select"></td>
       </tr>
       <tr>
         <td>利潤</td>
-        <td><input type="text" id="cost" class="form-control change"></td>
+        <td><input type="number" id="cost" class="form-control change select"></td>
       </tr>
       <tr>
         <td colspan=2><button type="button" class="btn btn-success form-control" id="add">確定</button></td>
@@ -87,6 +87,10 @@
           cale_number(yz, bl, cost);
         }
 
+      });
+
+      $(".select").click(function(){ 
+          $(this).select();
       });
 
       $('#number').change(function(){
