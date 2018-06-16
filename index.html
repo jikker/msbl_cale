@@ -1,0 +1,148 @@
+<!doctype html>
+
+<html lang="zh_TW">
+
+  <head>
+
+    <!-- Required meta tags -->
+
+    <meta charset="utf-8">
+
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+
+    <!-- Bootstrap CSS -->
+
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.1/css/bootstrap.min.css" integrity="sha384-WskhaSGFgHYWDcbwN70/dfYBj47jz9qbsMId/iRN3ewGhXQFZCSftd1LZCfmhktB" crossorigin="anonymous">
+    <title>Hello, world!</title>
+
+  </head>
+
+  <body>
+  
+
+  <div class="container-fluid">
+    <table class="table table-striped table-bordered table-hover">
+      <tr><td colspan="2"><h4>粒數計算機</h4></td></tr>
+      <tr>
+        <td>種類</td>
+        <td>
+          <select name="type" class="form-control change">
+          <option>請選擇</option>
+          <option>小多</option>
+          <option>大多</option>
+          <option>幼的</option>
+          <option>大幼</option>
+          <option>普通</option>
+          <option>剖半</option>
+          <option>乾仔</option>
+        </select></td>
+      </tr>
+      <tr>
+        <td>葉子</td>
+        <td><input type="text" id="yz" class="form-control change"></td>
+      </tr>
+      <tr>
+        <td>菁仔</td>
+        <td><input type="text" id="bl" class="form-control change"></td>
+      </tr>
+      <tr>
+        <td>粒數</td>
+        <td><input type="text" id="number" class="form-control"></td>
+      </tr>
+      <tr>
+        <td>利潤</td>
+        <td><input type="text" id="cost" class="form-control change"></td>
+      </tr>
+      <tr>
+        <td colspan=2><button type="button" class="btn btn-success form-control" id="add">確定</button></td>
+      </tr>
+    </table>
+    <div class="form-group" id="note"></div>
+    <table class="table table-striped table-bordered table-hover" id="total">
+      <tr>
+        <th>種類</th>
+        <th>葉子</th>
+        <th>菁仔</th>
+        <th>利潤</th>
+        <th>粒數</th>
+        <th>刪除</th>
+      </tr>
+    </table>
+    
+  </div>
+    <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js" integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo" crossorigin="anonymous"></script>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.3/umd/popper.min.js" integrity="sha384-ZMP7rVo3mIykV+2+9J3UJ46jBk0WLaUAdn689aCwoqbBJiSnjAK/l8WvCWPIPm49" crossorigin="anonymous"></script>
+
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.1.1/js/bootstrap.min.js" integrity="sha384-smHYKdLADwkXOn1EmN1qk/HfnUcbVRZyYmZ4qpPea6sjB/pTJ0euyQp0Mk8ck+5T" crossorigin="anonymous"></script>
+    
+    <script>
+      $('.change').change(function(){
+        var type = $('#type').val();
+        var yz = $('#yz').val();
+        var bl = $('#bl').val();
+        var cost = $('#cost').val();
+
+        if(type != '請選擇' && yz != '' && bl != '' && cost != ''){
+          cale_number(yz, bl, cost);
+        }
+
+      });
+
+      $('#number').change(function(){
+        var type = $('#type').val();
+        var yz = $('#yz').val();
+        var bl = $('#bl').val();
+        var number = $('#number').val();
+
+        if(type != '請選擇' && yz != '' && bl != '' && number != ''){
+          cale_number2(yz, bl, number);
+        }
+
+      });
+
+      $('#add').click(function(){
+        var type = $('#type').val();
+        var yz = $('#yz').val();
+        var bl = $('#bl').val();
+        var cost = $('#cost').val();
+
+        $('#note').html('');
+        if ( check_input('note', type , '請選擇', '請選擇類別') ) return;
+        if ( check_input('note', product , '請選擇', '請選擇產品') ) return;
+        if ( check_input('note', sell_money , '', '請輸入得標金額') ) return;
+      });
+
+      function cale_number(yz, bl, cost){
+        var sell=45;
+        yz = parseFloat(yz);
+        bl = parseFloat(bl);
+        cost = parseFloat(cost);
+        var number = Math.round((sell - cost) / (yz + bl));
+        $('#number').val(number);
+      }
+
+      function cale_number2(yz, bl, number){
+        var sell=45;
+        yz = parseFloat(yz);
+        bl = parseFloat(bl);
+        number = parseFloat(number);
+        var cost = Math.round((sell - ((yz + bl) * number))*10)/10;
+        $('#cost').val(cost);
+      }
+
+      function alert_note(itemid, message){
+        $('#' + itemid).html('<div class="alert alert-danger">'+message+'</div>');
+      }
+
+      function check_input(alert_item, val, chk_val, message){
+        if( val == chk_val){
+          alert_note(alert_item, message);
+          return true;
+        }
+        return false;
+      }
+    </script>
+  </body>
+
+</html>
