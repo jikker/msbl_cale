@@ -34,16 +34,17 @@
           <option>幼的</option>
           <option>大幼</option>
           <option>普通</option>
+          <option>菁仔</option>
           <option>剖半</option>
           <option>乾仔</option>
         </select></td>
       </tr>
       <tr>
-        <td>葉子</td>
+        <td>葉子成本</td>
         <td><input type="number" id="yz" class="form-control change select"></td>
       </tr>
       <tr>
-        <td>菁仔</td>
+        <td>菁仔成本</td>
         <td><input type="number" id="bl" class="form-control change select"></td>
       </tr>
       <tr>
@@ -66,10 +67,11 @@
     <table class="table table-striped table-bordered table-hover" id="total">
       <tr>
         <th>種類</th>
-        <th>葉子</th>
-        <th>菁仔</th>
-        <th>利潤</th>
+        <th>葉子成本</th>
+        <th>菁仔成本</th>
         <th>粒數</th>
+        <th>利潤</th>
+        <th>成本</th>
         <th>刪除</th>
       </tr>
     </table>
@@ -80,7 +82,8 @@
     <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.3/umd/popper.min.js" integrity="sha384-ZMP7rVo3mIykV+2+9J3UJ46jBk0WLaUAdn689aCwoqbBJiSnjAK/l8WvCWPIPm49" crossorigin="anonymous"></script>
 
     <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.1.1/js/bootstrap.min.js" integrity="sha384-smHYKdLADwkXOn1EmN1qk/HfnUcbVRZyYmZ4qpPea6sjB/pTJ0euyQp0Mk8ck+5T" crossorigin="anonymous"></script>
-    
+
+    <script src="https://cdn.jsdelivr.net/npm/js-cookie@2/src/js.cookie.min.js"></script>
     <script>
       $('.change').change(function(){
         var type = $('#type').val();
@@ -112,15 +115,31 @@
 
       $('#add').click(function(){
         var type = $('#type').val();
-        var yz = $('#yz').val();
-        var bl = $('#bl').val();
-        var cost = $('#cost').val();
+        var yz = $('#yz').val()*1;
+        var bl = $('#bl').val()*1;
+        var cost = $('#cost').val()*1;
+        var number = $('#number').val()*1;
+        var all_cost = $('#all_cost').text()*1;
 
         $('#note').html('');
         if ( check_input('note', type , '請選擇', '請選擇類別') ) return;
         if ( check_input('note', yz , '', '請輸入葉子金額') ) return;
         if ( check_input('note', bl , '', '請輸入菁仔金額') ) return;
         if ( check_input('note', cost , '', '請輸入利潤金額') ) return;
+        if ( check_input('note', number , '', '請輸入粒數') ) return;
+        
+        var chk=0;
+        $('.name').each(function(){
+          var val = $(this).text();
+          if (type == val) { chk++; }
+        });
+
+        if ( check_input('note', chk , '1', type+'已存在') ) return;
+
+        //        種類  葉子成本  菁仔成本  粒數  利潤  成本
+        var data = type+"|"+yz+"|"+bl+"|"+cost+"|"+all_cost;
+
+        $('#total').append('<tr id="row_" class="blrow" data="'+data+'"><td class="name">'+type+'</td><td>'+yz+'</td><td>'+bl+'</td><td>'+number+'</td><td>'+cost+'</td><td>'+all_cost+'</td><td><button type="button" class="btn btn-danger">刪除</button></td></tr>');
       });
 
       function cale_number(yz, bl, cost){
@@ -130,7 +149,7 @@
         cost = parseFloat(cost);
         var number = Math.round((sell - cost) / (yz + bl));
         $('#number').val(number);
-        $('#all_cost').text(50-cost);
+        $('#all_cost').text(45-cost);
       }
 
       function cale_number2(yz, bl, number){
@@ -140,7 +159,7 @@
         number = parseFloat(number);
         var cost = Math.round((sell - ((yz + bl) * number))*10)/10;
         $('#cost').val(cost);
-        $('#all_cost').text(50-cost);
+        $('#all_cost').text(45-cost);
       }
 
       function alert_note(itemid, message){
