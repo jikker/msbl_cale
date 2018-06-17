@@ -64,16 +64,21 @@
       </tr>
     </table>
     <div class="form-group" id="note"></div>
-    <table class="table table-striped table-bordered table-hover" id="total">
-      <tr>
-        <th>種類</th>
-        <th>葉子成本</th>
-        <th>菁仔成本</th>
-        <th>粒數</th>
-        <th>利潤</th>
-        <th>成本</th>
-        <th>刪除</th>
-      </tr>
+    <table class="table table-striped table-bordered table-hover">
+      <thead>
+        <tr>
+          <th>種類</th>
+          <th>葉子成本</th>
+          <th>菁仔成本</th>
+          <th>粒數</th>
+          <th>利潤</th>
+          <th>成本</th>
+          <th>刪除</th>
+        </tr>
+      </thead>
+      <tbody id="total">
+        
+      </tbody>
     </table>
     
   </div>
@@ -85,6 +90,8 @@
 
     <script src="https://cdn.jsdelivr.net/npm/js-cookie@2/src/js.cookie.min.js"></script>
     <script>
+      var bl_table = {};
+      var bl_serial = ['小多','大多','幼的','大幼','普通','菁仔','剖半','乾仔'];
       $('.change').change(function(){
         var type = $('#type').val();
         var yz = $('#yz').val();
@@ -123,7 +130,7 @@
 
         $('#note').html('');
         if ( check_input('note', type , '請選擇', '請選擇類別') ) return;
-        if ( check_input('note', yz , '', '請輸入葉子金額') ) return;
+        //if ( check_input('note', yz , '', '請輸入葉子金額') ) return;
         if ( check_input('note', bl , '', '請輸入菁仔金額') ) return;
         if ( check_input('note', cost , '', '請輸入利潤金額') ) return;
         if ( check_input('note', number , '', '請輸入粒數') ) return;
@@ -137,10 +144,30 @@
         if ( check_input('note', chk , '1', type+'已存在') ) return;
 
         //        種類  葉子成本  菁仔成本  粒數  利潤  成本
-        var data = type+"|"+yz+"|"+bl+"|"+cost+"|"+all_cost;
+        var data = type+"|"+yz+"|"+bl+"|"+number+"|"+cost+"|"+all_cost;
+        var type_number = return_type_number(bl_serial, type);
+        bl_table[type_number] = data;
 
-        $('#total').append('<tr id="row_" class="blrow" data="'+data+'"><td class="name">'+type+'</td><td>'+yz+'</td><td>'+bl+'</td><td>'+number+'</td><td>'+cost+'</td><td>'+all_cost+'</td><td><button type="button" class="btn btn-danger">刪除</button></td></tr>');
+        format_bl_table(bl_table);
       });
+
+      function format_bl_table(bl_table){
+        var data = "";
+        var k = "";
+        var key = Object.keys(bl_table);
+        $('#total').html('');
+        for (var i = 0; i < key.length; i++) {
+          k = key[i];
+          data = bl_table[k].split('|');
+          $('#total').append('<tr id="row_'+i+'" class="blrow" data="'+bl_table[i]+'"><td class="name">'+data[0]+'</td><td>'+data[1]+'</td><td>'+data[2]+'</td><td>'+data[3]+'</td><td>'+data[4]+'</td><td>'+data[5]+'</td><td><button type="button" class="btn btn-danger" value="row_'+i+'">刪除</button></td></tr>');
+        }
+      }
+
+      function return_type_number(bl_serial, type){
+        for (var i = 0 ; i <= bl_serial.length; i++) {
+          if (bl_serial[i] == type) { return i;}
+        }
+      }
 
       function cale_number(yz, bl, cost){
         var sell=45;
