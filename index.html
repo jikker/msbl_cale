@@ -92,6 +92,12 @@
     <script>
       var bl_table = {};
       var bl_serial = ['小多','大多','幼的','大幼','普通','菁仔','剖半','乾仔'];
+
+      $(function(){
+        bl_table = Cookies.getJSON('bl_table');
+        format_bl_table(bl_table);
+      });
+
       $('.change').change(function(){
         var type = $('#type').val();
         var yz = $('#yz').val();
@@ -149,7 +155,12 @@
         bl_table[type_number] = data;
 
         format_bl_table(bl_table);
+        set_cookie('bl_table', bl_table);
       });
+
+      function set_cookie(key, data) {
+        Cookies.set(key, data, { expires: 3650 });
+      }
 
       function format_bl_table(bl_table){
         var data = "";
@@ -159,8 +170,15 @@
         for (var i = 0; i < key.length; i++) {
           k = key[i];
           data = bl_table[k].split('|');
-          $('#total').append('<tr id="row_'+i+'" class="blrow" data="'+bl_table[i]+'"><td class="name">'+data[0]+'</td><td>'+data[1]+'</td><td>'+data[2]+'</td><td>'+data[3]+'</td><td>'+data[4]+'</td><td>'+data[5]+'</td><td><button type="button" class="btn btn-danger" value="row_'+i+'">刪除</button></td></tr>');
+          $('#total').append('<tr id="row_'+k+'" class="blrow" data="'+bl_table[i]+'"><td class="name">'+data[0]+'</td><td>'+data[1]+'</td><td>'+data[2]+'</td><td>'+data[3]+'</td><td>'+data[4]+'</td><td>'+data[5]+'</td><td><button type="button" class="btn btn-danger del" value="row_'+k+'">刪除</button></td></tr>');
         }
+      }
+
+      function del_bl_table(id){
+        $('#'+id).remove();
+        id = id.split("_")[1];
+        delete bl_table[id];
+        set_cookie('bl_table', bl_table);
       }
 
       function return_type_number(bl_serial, type){
@@ -176,7 +194,7 @@
         cost = parseFloat(cost);
         var number = Math.round((sell - cost) / (yz + bl));
         $('#number').val(number);
-        $('#all_cost').text(45-cost);
+        $('#all_cost').text( Math.round((45 - cost) *10) / 10 );
       }
 
       function cale_number2(yz, bl, number){
@@ -186,7 +204,7 @@
         number = parseFloat(number);
         var cost = Math.round((sell - ((yz + bl) * number))*10)/10;
         $('#cost').val(cost);
-        $('#all_cost').text(45-cost);
+        $('#all_cost').text( Math.round((45 - cost) *10) / 10 );
       }
 
       function alert_note(itemid, message){
@@ -200,6 +218,10 @@
         }
         return false;
       }
+
+      $(document).on('click', '.del',function(){
+        del_bl_table( $(this).val() );
+      });
     </script>
   </body>
 
