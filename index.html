@@ -99,6 +99,7 @@
 
       $(function(){
         bl_table = Cookies.getJSON('bl_table');
+        if ( bl_table == undefined) { bl_table = {}; }
         format_bl_table(bl_table);
         set_message(bl_table);
       });
