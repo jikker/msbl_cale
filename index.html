@@ -178,6 +178,7 @@
           text += data[0]+" "+data[3]+"粒\n";
         }
         $('#message').text(text);
+        text = text.replace(/\r\n/g," ");
         $('#line_btn').attr('data-url',text);
       }
 
