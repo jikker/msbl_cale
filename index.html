@@ -80,7 +80,12 @@
         
       </tbody>
     </table>
-    
+    <div class="form-group">
+      <div class="line-it-button" data-lang="zh_Hant" data-type="share-d" data-url="你好~~~" style="display: none;"></div>
+
+ <script src="https://d.line-scdn.net/r/web/social-plugin/js/thirdparty/loader.min.js" async="async" defer="defer"></script>
+      <textarea id="message" rows="8" class="form-control"></textarea>
+    </div>
   </div>
     <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js" integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo" crossorigin="anonymous"></script>
 
@@ -96,6 +101,7 @@
       $(function(){
         bl_table = Cookies.getJSON('bl_table');
         format_bl_table(bl_table);
+        set_message(bl_table);
       });
 
       $('.change').change(function(){
@@ -111,6 +117,10 @@
       });
 
       $(".select").click(function(){ 
+          $(this).select();
+      });
+
+      $("#message").click(function(){ 
           $(this).select();
       });
 
@@ -156,7 +166,19 @@
 
         format_bl_table(bl_table);
         set_cookie('bl_table', bl_table);
+        set_message(bl_table);
       });
+
+      function set_message(bl_table){
+        var text = "改粒數\n";
+        var key = Object.keys(bl_table);
+        for (var i = 0; i < key.length; i++) {
+          k = key[i];
+          data = bl_table[k].split('|');
+          text += data[0]+" "+data[3]+"粒\n";
+        }
+        $('#message').text(text);
+      }
 
       function set_cookie(key, data) {
         Cookies.set(key, data, { expires: 3650 });
