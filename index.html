@@ -164,6 +164,12 @@
         var type_number = return_type_number(bl_serial, type);
         bl_table[type_number] = data;
 
+        $('#type').val('請選擇');
+        $('#bl').val('');
+        $('#cost').val('cost');
+        $('#number').val('number');
+        $('#all_cost').text('');
+
         format_bl_table(bl_table);
         set_cookie('bl_table', bl_table);
         set_message(bl_table);
